@@ -18,6 +18,20 @@ public func routes(_ router: Router) throws {
         return "requested user id: #\(userId)"
     }
 
+    // POST /search_todo
+    router.post("search") { req -> Future<[Todo]> in
+        let sampleTodos = [
+            Todo(id: 1, title: "a"),
+            Todo(id: 2, title: "b"),
+            Todo(id: 3, title: "a"),
+            Todo(id: 4, title: "b"),
+            Todo(id: 5, title: "a"),
+            Todo(id: 6, title: "b")
+        ]
+        return try! req.content.decode(SearchTodoRequest.self).map(to: [Todo].self) { searchTodoRequest in
+            return sampleTodos.filter { $0.id == searchTodoRequest.id }
+        }
+    }
 
     // Example of configuring a controller
     let todoController = TodoController()
